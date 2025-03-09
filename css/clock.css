@@ -1,15 +1,15 @@
-        .clock {
+.clock {
             position: relative;
             width: 300px;
             height: 300px;
             border: 10px solid #333;
             border-radius: 50%;
             background: #fff;
-            box-shadow: 0 0 20px rgba(0,0,0,0.1);
-        }
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
 
         /* 时刻数字 */
-        .number {
+.number {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -19,7 +19,7 @@
             color: #333;
         }
 
-        .number div {
+.number div {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -27,7 +27,7 @@
         }
 
         /* 刻度线 */
-        .mark {
+.mark {
             position: absolute;
             width: 2px;
             height: 10px;
@@ -37,7 +37,7 @@
         }
 
         /* 表针公共样式 */
-        .hand {
+.hand {
             position: absolute;
             background: #333;
             transform-origin: 50% 100%;
@@ -46,26 +46,26 @@
             border-radius: 4px;
         }
 
-        .hour-hand {
+.hour-hand {
             width: 6px;
             height: 60px;
             background: #000;
         }
 
-        .minute-hand {
+ .minute-hand {
             width: 4px;
             height: 80px;
             background: #666;
         }
 
-        .second-hand {
+.second-hand {
             width: 2px;
             height: 90px;
             background: #ff0000;
         }
 
         /* 中心圆点 */
-        .center {
+.center {
             position: absolute;
             width: 12px;
             height: 12px;
