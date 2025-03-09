@@ -1,8 +1,11 @@
-//此时钟由deepseek编写
 // 生成刻度线
         function createMarks() {
-            const marks = document.querySelector('.marks');
-            for(let i = 0; i < 60; i++) {
+            const clock = document.querySelector('.clock');
+            const marks = document.createElement('div');
+            marks.className = 'marks';
+            clock.appendChild(marks);
+
+            for (let i = 0; i < 60; i++) {
                 const mark = document.createElement('div');
                 mark.className = 'mark';
                 mark.style.transform = `rotate(${i * 6}deg)`;
@@ -21,23 +24,20 @@
         // 更新时钟
         function updateClock() {
             const now = getBeijingTime();
-            
+
             const hours = now.getHours();
             const minutes = now.getMinutes();
             const seconds = now.getSeconds();
-            
+
             // 计算角度
             const hourDeg = (hours % 12) * 30 + minutes * 0.5;
             const minuteDeg = minutes * 6 + seconds * 0.1;
             const secondDeg = seconds * 6;
 
             // 应用旋转角度
-            document.querySelector('.hour-hand').style.transform = 
-                `rotate(${hourDeg}deg)`;
-            document.querySelector('.minute-hand').style.transform = 
-                `rotate(${minuteDeg}deg)`;
-            document.querySelector('.second-hand').style.transform = 
-                `rotate(${secondDeg}deg)`;
+            document.querySelector('.hour-hand').style.transform = `rotate(${hourDeg}deg)`;
+            document.querySelector('.minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
+            document.querySelector('.second-hand').style.transform = `rotate(${secondDeg}deg)`;
         }
 
         // 初始化
