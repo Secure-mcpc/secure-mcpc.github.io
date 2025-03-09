@@ -30,6 +30,7 @@ nav a{
 	color:grey;
 	text-decoration: none;
 	padding:1px 5px;
+	border-radius:10px;
 }
 li a{
 	color:#fff;
