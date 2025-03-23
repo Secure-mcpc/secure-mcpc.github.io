@@ -3,7 +3,7 @@ body{
 	background-color:#383838;
 	background-image:url('https://secure-mcpc.github.io/img/body.png');
 	background-size:128px 128px;
-	background-repeat:no-repeat;
+	/*background-repeat:no-repeat;*/
 	background-position:center;
 	background-attachment:fixed;
 	margin:0px;
