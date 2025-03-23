@@ -11,10 +11,12 @@ body{
 header{
 	background-color:#303030;
 	background-image:url('https://secure-mcpc.github.io/img/header.jpg');
+	background-size:128px 128px;
 	background-position:center;
 	padding:10px;
 	color:grey;
 	text-align:center;
+	height:128px;
 }
 nav{
 	background-color:#303030;
