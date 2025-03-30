@@ -31,7 +31,7 @@ nav{
 	image-rendering:pixelated;
 	background-image:url('https://secure-mcpc.github.io/img/grass.jpg');
 	background-size:128px 128px;
-	background-position:center;
+	background-position:top;
 	background-attachment:fixed;
 }
 nav a:hover{
