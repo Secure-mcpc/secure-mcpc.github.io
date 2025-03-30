@@ -12,7 +12,7 @@ body{
 }
 header{
 	background-color:#303030;
-	background-image:url('https://secure-mcpc.github.io/img/dirt.png'),url('https://secure-mcpc.github.io/img/grass.jpg');
+	background-image:url('https://secure-mcpc.github.io/img/dirt.jpg'),url('https://secure-mcpc.github.io/img/grass.jpg');
 	background-position: bottom, top;
 	background-size:128px 128px;
 	background-position:center;
