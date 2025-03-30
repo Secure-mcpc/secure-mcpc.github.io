@@ -2,11 +2,9 @@ body{
 	font-family: Arial, sans-serif;
 	background-color:#383838;
 	background-image:url('https://secure-mcpc.github.io/img/stone.png');
-	image-rendering:pixelated;
 	background-size:128px 128px;
 	/*background-repeat:no-repeat;*/
 	background-position:center;
-	background-attachment:fixed;
 	margin:0px;
 	padding:0px;
 }
@@ -27,6 +25,7 @@ nav{
 	padding:10px;
 	position:fixed;
 	top:0px;
+	image-rendering:pixelated;
 }
 nav a:hover{
 	background-color:#383838;
@@ -54,6 +53,7 @@ footer{
 	text-align:center;
 	background-image:url('https://secure-mcpc.github.io/img/stone.png'),url('https://secure-mcpc.github.io/img/bedrock.png');
 	background-position: top, bottom;
+	background-size:128px 128px;
 	
 }
 a{
