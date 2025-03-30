@@ -12,14 +12,13 @@ body{
 }
 header{
 	background-color:#303030;
-	background-image:url('https://secure-mcpc.github.io/img/dirt.jpg'),url('https://secure-mcpc.github.io/img/grass.jpg');
-	background-position: bottom, top;
+	background-image:url('https://secure-mcpc.github.io/img/dirt.jpg');
 	background-size:128px 128px;
 	background-position:center;
 	padding:10px;
 	color:green;
 	text-align:center;
-	height:100px;
+	height:128px;
 	image-rendering:pixelated;
 	background-attachment:fixed;
 }
@@ -30,7 +29,7 @@ nav{
 	position:fixed;
 	top:0px;
 	image-rendering:pixelated;
-	background-image:url('https://secure-mcpc.github.io/img/grass.png');
+	background-image:url('https://secure-mcpc.github.io/img/grass.jpg');
 	background-size:128px 128px;
 	background-position:center;
 	background-attachment:fixed;
@@ -56,7 +55,7 @@ li a:hover{
 	text-decoration:none;
 }
 footer{
-	height:240px;
+	height:256px;
 	background-color:#303030;
 	color:grey;
 	text-align:center;
