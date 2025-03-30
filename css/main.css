@@ -7,6 +7,8 @@ body{
 	background-position:center;
 	margin:0px;
 	padding:0px;
+	image-rendering:pixelated;
+	background-attachment:fixed;
 }
 header{
 	background-color:#303030;
@@ -18,6 +20,8 @@ header{
 	color:green;
 	text-align:center;
 	height:100px;
+	image-rendering:pixelated;
+	background-attachment:fixed;
 }
 nav{
 	background-color:#303030;
@@ -26,6 +30,10 @@ nav{
 	position:fixed;
 	top:0px;
 	image-rendering:pixelated;
+	background-image:url('https://secure-mcpc.github.io/img/grass.png');
+	background-size:128px 128px;
+	background-position:center;
+	background-attachment:fixed;
 }
 nav a:hover{
 	background-color:#383838;
@@ -48,12 +56,15 @@ li a:hover{
 	text-decoration:none;
 }
 footer{
+	height:240px;
 	background-color:#303030;
 	color:grey;
 	text-align:center;
 	background-image:url('https://secure-mcpc.github.io/img/stone.png'),url('https://secure-mcpc.github.io/img/bedrock.png');
 	background-position: top, bottom;
 	background-size:128px 128px;
+	image-rendering:pixelated;
+	background-attachment:fixed;
 	
 }
 a{
