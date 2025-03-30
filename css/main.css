@@ -12,7 +12,7 @@ body{
 }
 header{
 	background-color:#303030;
-	background-image:url('https://secure-mcpc.github.io/img/dirt.png'),url('https://secure-mcpc.github.io/img/grass.png');
+	background-image:url('https://secure-mcpc.github.io/img/dirt.png'),url('https://secure-mcpc.github.io/img/grass.jpg');
 	background-position: bottom, top;
 	background-size:128px 128px;
 	background-position:center;
@@ -60,7 +60,7 @@ footer{
 	background-color:#303030;
 	color:grey;
 	text-align:center;
-	background-image:url('https://secure-mcpc.github.io/img/stone.png'),url('https://secure-mcpc.github.io/img/bedrock.png');
+	background-image:url('https://secure-mcpc.github.io/img/stone.png'),url('https://secure-mcpc.github.io/img/bedrock.jpg');
 	background-position: top, bottom;
 	background-size:128px 128px;
 	image-rendering:pixelated;
