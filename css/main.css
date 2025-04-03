@@ -7,7 +7,6 @@ body{
 	padding:0px;
 }
 header{
-	background-image:linear-gradient(to bottom right, #6600FF , #993366);
 	background-position:center;
 	padding:0px;
 	color:green;
@@ -15,7 +14,6 @@ header{
 	height:128px;
 }
 nav{
-	background-image:linear-gradient(to bottom right, #6600FF , #993366);
 	text-align:center;
 	padding:10px;
 	position:fixed;
@@ -45,7 +43,6 @@ footer{
 	height:256px;
 	color:grey;
 	text-align:center;
-	background-image:linear-gradient(to bottom right, #6600FF , #993366);
 	
 }
 a{
