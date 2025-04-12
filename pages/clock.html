@@ -51,25 +51,9 @@
         <div class="hand hour-hand" style="transform: rotate(344.5deg);"></div>
         <div class="hand minute-hand" style="transform: rotate(174.7deg);"></div>
         <div class="hand second-hand" style="transform: rotate(42deg);"></div>
-        
     </div>
 
     <script>
-        // 生成刻度线
-        function createMarks() {
-            const clock = document.querySelector('.clock');
-            const marks = document.createElement('div');
-            marks.className = 'marks';
-            clock.appendChild(marks);
-
-            for (let i = 0; i < 60; i++) {
-                const mark = document.createElement('div');
-                mark.className = 'mark';
-                mark.style.transform = `rotate(${i * 6}deg)`;
-                marks.appendChild(mark);
-            }
-        }
-
         // 获取东八区时间
         function getBeijingTime() {
             const now = new Date();
