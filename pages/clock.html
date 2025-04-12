@@ -80,11 +80,6 @@
             document.querySelector('.minute-hand').style.transform = `rotate(${minuteDeg}deg)`;
             document.querySelector('.second-hand').style.transform = `rotate(${secondDeg}deg)`;
         }
-
-        // 初始化
-        createMarks();
-        setInterval(updateClock, 1000);
-        updateClock(); // 立即执行一次
     </script>
 
 
