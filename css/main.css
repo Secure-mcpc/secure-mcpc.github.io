@@ -1,6 +1,14 @@
-body{
+body.main{
 	font-family: Arial, sans-serif;
 	background-image:linear-gradient(to bottom right, #00e3ff , #ff00ac);
+	/*background-repeat:no-repeat;*/
+	background-position:center;
+	margin:0px;
+	padding:0px;
+}
+body.entry{
+	font-family: Arial, sans-serif;
+	background-image:linear-gradient(to bottom right, #32CD32 , #FF7F50);
 	/*background-repeat:no-repeat;*/
 	background-position:center;
 	margin:0px;
