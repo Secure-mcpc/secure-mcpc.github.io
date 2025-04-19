@@ -27,11 +27,11 @@ nav{
 	position:fixed;
 	top:0px;
 }
-nav a:hover{
+nav a span:hover{
 	border: 1px solid #fff
 	color:#fff;
 }
-nav a{
+nav a span{
 	color:grey;
 	text-decoration: none;
 	padding:1px 5px;
