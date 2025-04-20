@@ -27,7 +27,35 @@
     <!--...-->
     <div>
       <p >这些东西乍一看很正常，但仔细琢磨却又会让你觉得很诡异...</p>
-      <style>div.list p a{border:2px;padding:5px;margin:0px;background-color:#228B22;box-sizing:border-box;border:rgb(0 0 0) solid 0.1rem;width:50px;display:inline-block;text-align:center;}div.list p{margin-top:0px;}div.list{width:80%;position:absolute;left:10%;}</style>
+      <style>div.list p a{
+        border:2px;
+        padding:5px;
+        margin:0px;
+        background-color:#228B22;
+        color:darkred;
+        box-sizing:border-box;
+        border:rgb(0 0 0) solid 0.1rem;
+        width:50px;
+        display:inline-block;
+        text-align:center;
+        text-decoration:none;
+        }
+        div.list p{
+          margin-top:0px;
+        }
+        div.list{
+          width:80%;
+          position:absolute;
+          left:10%;
+        }
+        div.list p a:hover{
+          color:red;
+        }
+        div.list p a:visited{
+          color:darkred;
+          text-decoration:none;
+        }
+      </style>
       <div class="list">
         <p>
           <a href="#a">a区</a>
