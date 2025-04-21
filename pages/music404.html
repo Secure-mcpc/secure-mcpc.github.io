@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <style>
+    body{
+      margin:0px;
+      padding:0px;
+    }
+  </style>
+</head>
+<body>
+  <button id="playBtn">▶ 播放</button>
+
+  <script>
+    // 音乐库（替换成你的音乐文件路径）
+    const songs = [
+'https://secure-mcpc.github.io/music/Moog City.mp3',
+'https://secure-mcpc.github.io/music/Moog City 2.mp3',
+'https://secure-mcpc.github.io/music/Mutation.mp3',
+'https://secure-mcpc.github.io/music/Beginning 2.mp3',
+'https://secure-mcpc.github.io/music/Beginning.mp3',
+'https://secure-mcpc.github.io/music/Floating Trees.mp3'
+    ];
+
+    // 核心元素和变量
+    const audio = new Audio();
+    const playBtn = document.getElementById('playBtn');
+    let currentIndex = -1; // 当前播放的歌曲索引
+    let isPlaying = false; // 播放状态
+
+    // 随机选择不重复的歌曲
+    function getRandomSong() {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * songs.length);
+      } while (newIndex === currentIndex); // 确保不重复
+      currentIndex = newIndex;
+      return songs[currentIndex];
+    }
+
+    // 播放新歌曲
+    function playNewSong() {
+      audio.src = getRandomSong();
+      audio.play().catch(() => { 
+        playBtn.textContent = '▶ 播放'; // 处理自动播放被阻止的情况
+      });
+      isPlaying = true;
+      playBtn.textContent = '⏸ 暂停';
+    }
+
+    // 按钮点击事件
+    playBtn.addEventListener('click', () => {
+      if (isPlaying) {
+        audio.pause();
+        isPlaying = false;
+        playBtn.textContent = '▶ 播放';
+      } else {
+        // 如果是暂停后继续播放，不换歌
+        if (audio.src) {
+          audio.play();
+          playBtn.textContent = '⏸ 暂停';
+        } else { // 首次点击
+          playNewSong();
+        }
+        isPlaying = true;
+      }
+    });
+
+    // 歌曲播放结束事件
+    audio.addEventListener('ended', () => {
+      playNewSong();
+    });
+
+    // 尝试自动播放（注意：浏览器可能会阻止）
+    audio.src = getRandomSong();
+    audio.play().catch(() => { 
+      playBtn.textContent = '点击播放'; // 显示提示让用户点击
+    });
+  </script>
+</body>
+</html>
