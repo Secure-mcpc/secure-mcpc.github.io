@@ -28,7 +28,7 @@ nav{
 	top:0px;
 }
 nav a span b:hover{
-	border: 1px solid #fff
+	border: 1px solid #fff;
 	color:#fff;
 }
 nav a span b{
@@ -38,7 +38,7 @@ nav a span b{
 	border-radius:10px;
 }
 nav a span b:visited:hover{
-	border: 1px solid #fff
+	border: 1px solid #fff;
 	color:#fff;
 }
 li a{
