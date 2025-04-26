@@ -6,6 +6,7 @@ body.main{
 	margin:0px;
 	padding:0px;
 	min-height:100vh;
+	position:relative;
 }
 body.entry{
 	font-family: Arial, sans-serif;
@@ -15,6 +16,7 @@ body.entry{
 	margin:0px;
 	padding:0px;
 	min-height:100vh;
+	position:relative;
 }
 header{
 	background-position:center;
@@ -58,7 +60,7 @@ footer{
 	height:256px;
 	color:grey;
 	text-align:center;
-	position:relative;
+	position:absolute;
 	bottom:0;
 	
 }
