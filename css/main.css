@@ -28,17 +28,14 @@ nav{
 	top:0px;
 }
 nav a span b:hover{
-	border: 1px solid #fff;
 	color:#fff;
 }
 nav a span b{
 	color:grey;
 	text-decoration: none;
 	padding:1px 5px;
-	border-radius:10px;
 }
 nav a span b:visited:hover{
-	border: 1px solid #fff;
 	color:#fff;
 }
 li a{
