@@ -5,6 +5,7 @@ body.main{
 	background-position:center;
 	margin:0px;
 	padding:0px;
+	height:auto;
 }
 body.entry{
 	font-family: Arial, sans-serif;
@@ -13,6 +14,7 @@ body.entry{
 	background-position:center;
 	margin:0px;
 	padding:0px;
+	height:auto;
 }
 header{
 	background-position:center;
@@ -26,6 +28,9 @@ nav{
 	padding:10px;
 	position:fixed;
 	top:0px;
+	width:100%;
+	height:64px;
+	padding:0px;
 }
 nav a span b:hover{
 	color:#fff;
