@@ -26,6 +26,18 @@ div.ud{
 a.uda{
   color:red;
 }
+a.uda:hover{
+  color:darkred;
+}
+a.uda:visited:hover{
+  color:darkred;
+}
 a.udb{
   color:yellow;
+}
+a.udb:hover{
+  color:gold;
+}
+a.udb:visited:hover{
+  color:gold;
 }
