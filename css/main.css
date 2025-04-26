@@ -5,7 +5,7 @@ body.main{
 	background-position:center;
 	margin:0px;
 	padding:0px;
-	height:auto;
+	min-height:100vh;
 }
 body.entry{
 	font-family: Arial, sans-serif;
@@ -14,7 +14,7 @@ body.entry{
 	background-position:center;
 	margin:0px;
 	padding:0px;
-	height:auto;
+	min-height:100vh;
 }
 header{
 	background-position:center;
