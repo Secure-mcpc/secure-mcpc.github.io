@@ -75,3 +75,6 @@ a:hover{
 a:visited{
 	color:grey;
 }
+a:visited:hover{
+	color:#fff;
+}
