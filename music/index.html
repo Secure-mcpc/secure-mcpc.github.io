@@ -1,0 +1,161 @@
+<!DOCTYPE html><!--deepseek编辑-->
+<html>
+<body>
+<style>
+#playlist {
+    margin: 10px 0;
+    padding: 0;
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+#playlist li {
+    padding: 8px 12px;
+    cursor: pointer;
+    border-bottom: 1px solid #ddd;
+    transition: background 0.3s;
+}
+#playlist li:hover {
+    background: #f0f0f0;
+}
+#playlist li.playing {
+    background: #e3f2fd;
+    font-weight: 500;
+}
+</style>
+
+<input type="file" id="fileInput" accept="audio/*" multiple style="display: none;">
+<button onclick="handleFileSelect()">📁 添加音乐</button>
+<button id="playBtn" disabled>▶ 播放</button>
+<ul id="playlist"></ul>
+
+<script>
+const audio = new Audio();
+const playBtn = document.getElementById('playBtn');
+const fileInput = document.getElementById('fileInput');
+const playlistEl = document.getElementById('playlist');
+
+let userSongs = [];
+let currentIndex = -1;
+let currentObjectURL = null;
+let isSingleLoop = false;
+
+// 处理文件选择
+function handleFileSelect() {
+    fileInput.value = ''; // 重置文件选择器
+    fileInput.click();
+}
+
+// 更新播放列表显示
+function updatePlaylist() {
+    playlistEl.innerHTML = userSongs.map((file, index) => `
+        <li class="${index === currentIndex ? 'playing' : ''}" 
+            data-index="${index}"
+            onclick="playSpecificSong(${index}, true)">
+            ${file.name} (${formatFileSize(file.size)})
+        </li>
+    `).join('');
+    
+    // 自动滚动到正在播放的曲目
+    const playingItem = playlistEl.querySelector('.playing');
+    if (playingItem) {
+        playingItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+}
+
+// 文件大小格式化
+function formatFileSize(bytes) {
+    if (bytes === 0) return '0 B';
+    const k = 1024;
+    const sizes = ['B', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+}
+
+// 清理资源
+function cleanupResources() {
+    if (currentObjectURL) {
+        URL.revokeObjectURL(currentObjectURL);
+        currentObjectURL = null;
+    }
+    audio.src = '';
+}
+
+// 播放指定歌曲
+function playSpecificSong(index, loop = false) {
+    if (index < 0 || index >= userSongs.length) return;
+    
+    isSingleLoop = loop;
+    currentIndex = index;
+    
+    cleanupResources();
+    const file = userSongs[currentIndex];
+    currentObjectURL = URL.createObjectURL(file);
+    
+    audio.src = currentObjectURL;
+    audio.loop = loop;
+    audio.play().catch(() => {
+        playBtn.textContent = '▶ 播放';
+    });
+    
+    playBtn.disabled = false;
+    playBtn.textContent = '⏸ 暂停';
+    updatePlaylist();
+}
+
+// 文件选择事件处理
+fileInput.addEventListener('change', (e) => {
+    const newFiles = Array.from(e.target.files);
+    if (newFiles.length === 0) return;
+
+    // 合并新旧文件列表（去重）
+    newFiles.forEach(newFile => {
+        if (!userSongs.some(existingFile => 
+            existingFile.name === newFile.name && 
+            existingFile.size === newFile.size
+        )) {
+            userSongs.push(newFile);
+        }
+    });
+
+    // 自动播放第一个新增文件（如果当前没有在播放）
+    if (currentIndex === -1 && userSongs.length > 0) {
+        currentIndex = userSongs.length - newFiles.length;
+        playSpecificSong(currentIndex);
+    }
+    
+    updatePlaylist();
+    playBtn.disabled = false;
+});
+
+// 播放/暂停控制
+playBtn.addEventListener('click', () => {
+    if (userSongs.length === 0) return;
+    
+    if (audio.paused) {
+        if (currentIndex === -1) {
+            currentIndex = 0;
+            playSpecificSong(currentIndex);
+        } else {
+            audio.play();
+        }
+        playBtn.textContent = '⏸ 暂停';
+    } else {
+        audio.pause();
+        playBtn.textContent = '▶ 播放';
+    }
+});
+
+// 歌曲结束处理
+audio.addEventListener('ended', () => {
+    if (!isSingleLoop) {
+        const nextIndex = (currentIndex + 1) % userSongs.length;
+        playSpecificSong(nextIndex);
+    }
+});
+
+// 页面关闭清理
+window.addEventListener('beforeunload', cleanupResources);
+</script>
+</body>
+</html>
