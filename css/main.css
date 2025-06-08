@@ -18,6 +18,16 @@ body.entry{
 	min-height:100vh;
 	position:relative;
 }
+body.dark{
+	background-image:linear-gradient(to bottom right, #000000 , #000000);
+	/*background-repeat:no-repeat;*/
+	background-position:center;
+	margin:0px;
+	padding-bottom:256px;
+	min-height:100vh;
+	position:relative;
+	color:#fff;
+}
 header{
 	background-position:center;
 	padding:0px;
