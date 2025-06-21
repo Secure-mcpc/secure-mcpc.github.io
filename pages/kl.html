@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <div id="score">分数: 0</div>
+    <div id="score">提示：只能用电脑玩！ 分数: 0</div>
     <div id="restart">游戏结束！<br>得分: <span id="finalScore">0</span><br>按空格键重新开始</div>
     <canvas id="gameCanvas" width="800" height="200"></canvas>
 
@@ -150,8 +150,8 @@
             }
 
             // 动态难度系统
-            const currentSpeed = baseSpeed + Math.floor(score / 100);
-            const spawnProbability = 0.015 + (score / 5000);
+            const currentSpeed = baseSpeed + Math.floor(score / 114514);
+            const spawnProbability = 0.015 + (score / 114514);
 
             // 生成障碍物
             if (obstacles.length === 0 || 
