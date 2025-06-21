@@ -34,7 +34,7 @@
     </style>
 </head>
 <body>
-    <div id="score">提示：只能用电脑玩！ 分数: 0</div>
+    <div id="score">分数: 0</div>
     <div id="restart">游戏结束！<br>得分: <span id="finalScore">0</span><br>按空格键重新开始</div>
     <canvas id="gameCanvas" width="800" height="200"></canvas>
 
@@ -132,7 +132,7 @@
                 ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
             });
 
-            scoreElement.textContent = `分数: ${Math.floor(score)}`;
+            scoreElement.textContent = `提示：只能在电脑上玩！ 分数: ${Math.floor(score)}`;
         }
 
         function update() {
