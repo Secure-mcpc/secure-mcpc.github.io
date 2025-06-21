@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>恐龙跳跃游戏 - 优化版</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background-color: #f0f0f0;
+        }
+        #gameCanvas {
+            background-color: white;
+            margin: 20px auto;
+            display: block;
+            border: 2px solid #333;
+        }
+        #score {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            font-size: 24px;
+            font-family: Arial;
+        }
+        #restart {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            font-size: 24px;
+            font-family: Arial;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div id="score">分数: 0</div>
+    <div id="restart">游戏结束！<br>得分: <span id="finalScore">0</span><br>按空格键重新开始</div>
+    <canvas id="gameCanvas" width="800" height="200"></canvas>
+
+    <script>
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreElement = document.getElementById('score');
+        const restartElement = document.getElementById('restart');
+        const finalScoreElement = document.getElementById('finalScore');
+
+        // 游戏变量
+        let dino = {
+            x: 50,
+            y: 150,
+            width: 30,
+            height: 50,
+            velocity: 0,
+            isJumping: false
+        };
+
+        let obstacles = [];
+        let score = 0;
+        let gameLoop;
+        let isGameOver = false;
+        let lastObstaclePosition = 0;
+
+        // 游戏参数
+        const gravity = 0.8;
+        const jumpForce = -15;
+        const baseSpeed = 5;
+        const minObstacleGap = 250;
+        const minObstacleWidth = 15;
+        const maxObstacleWidth = 30;
+        const minObstacleHeight = 30;
+        const maxObstacleHeight = 50;
+
+        // 事件监听
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                if (!dino.isJumping && !isGameOver) {
+                    dino.velocity = jumpForce;
+                    dino.isJumping = true;
+                }
+                if (isGameOver) {
+                    resetGame();
+                }
+            }
+        });
+
+        function resetGame() {
+            dino.y = 150;
+            obstacles = [];
+            score = 0;
+            isGameOver = false;
+            lastObstaclePosition = 0;
+            restartElement.style.display = 'none';
+            gameLoop = requestAnimationFrame(update);
+        }
+
+        function createObstacle() {
+            const width = minObstacleWidth + Math.random() * (maxObstacleWidth - minObstacleWidth);
+            const height = minObstacleHeight + Math.random() * (maxObstacleHeight - minObstacleHeight);
+            lastObstaclePosition = canvas.width;
+            
+            return {
+                x: canvas.width,
+                y: 160 - height + 20, // 保持底部对齐
+                width: width,
+                height: height,
+                passed: false
+            };
+        }
+
+        function checkCollision(obstacle) {
+            return dino.x < obstacle.x + obstacle.width &&
+                   dino.x + dino.width > obstacle.x &&
+                   dino.y < obstacle.y + obstacle.height &&
+                   dino.y + dino.height > obstacle.y;
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 绘制地面
+            ctx.fillStyle = '#666';
+            ctx.fillRect(0, 180, canvas.width, 20);
+
+            // 绘制恐龙
+            ctx.fillStyle = '#444';
+            ctx.fillRect(dino.x, dino.y, dino.width, dino.height);
+
+            // 绘制障碍物
+            ctx.fillStyle = '#ff5555';
+            obstacles.forEach(obstacle => {
+                ctx.fillRect(obstacle.x, obstacle.y, obstacle.width, obstacle.height);
+            });
+
+            scoreElement.textContent = `分数: ${Math.floor(score)}`;
+        }
+
+        function update() {
+            if (isGameOver) return;
+
+            // 恐龙运动
+            dino.y += dino.velocity;
+            dino.velocity += gravity;
+
+            // 落地检测
+            if (dino.y >= 150) {
+                dino.y = 150;
+                dino.velocity = 0;
+                dino.isJumping = false;
+            }
+
+            // 动态难度系统
+            const currentSpeed = baseSpeed + Math.floor(score / 100);
+            const spawnProbability = 0.015 + (score / 5000);
+
+            // 生成障碍物
+            if (obstacles.length === 0 || 
+                (canvas.width - lastObstaclePosition > minObstacleGap)) {
+                if (Math.random() < spawnProbability) {
+                    obstacles.push(createObstacle());
+                }
+            }
+
+            // 更新障碍物
+            obstacles.forEach(obstacle => {
+                obstacle.x -= currentSpeed;
+
+                // 碰撞检测
+                if (checkCollision(obstacle)) {
+               isGameOver = true;
+                    finalScoreElement.textContent = Math.floor(score);
+                    restartElement.style.display = 'block';
+                    cancelAnimationFrame(gameLoop);
+                }
+
+                // 分数计算
+                if (!obstacle.passed && obstacle.x + obstacle.width < dino.x) {
+                    score += 10;
+                    obstacle.passed = true;
+                }
+            });
+
+            // 清理屏幕外障碍物
+            obstacles = obstacles.filter(obstacle => obstacle.x + obstacle.width > 0);
+
+            // 更新最后障碍物位置
+            if (obstacles.length > 0) {
+                lastObstaclePosition = obstacles[obstacles.length - 1].x;
+            }
+
+            // 基础分数增长
+            score += 0.5;
+
+            draw();
+            gameLoop = requestAnimationFrame(update);
+        }
+
+        // 启动游戏
+        resetGame();
+    </script>
+</body>
+</html>
