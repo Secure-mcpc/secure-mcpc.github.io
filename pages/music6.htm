@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>无延迟循环播放器</title>
+    <style>
+        body {
+            margin: 0px;
+        }
+        button {
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <button id="playBtn">播放</button>
+
+    <script>
+        // 音频URL - 替换为您想要循环播放的音频文件
+        const audioUrl = 'https://deltarune.com/assets/audio/battle_vapor.mp3';
+        
+        // 全局变量
+        let audioContext;
+        let audioBuffer;
+        let sourceNode;
+        let isPlaying = false;
+        const playBtn = document.getElementById('playBtn');
+        
+        // 初始化音频
+        async function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                const response = await fetch(audioUrl);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffer = await audioContext.decodeAudioData(arrayBuffer);
+                playBtn.disabled = false;
+            } catch (error) {
+                console.error('初始化失败:', error);
+            }
+        }
+        
+        // 播放音频（无缝循环）
+        function playAudio() {
+            if (!audioBuffer) return;
+            
+            sourceNode = audioContext.createBufferSource();
+            sourceNode.buffer = audioBuffer;
+            sourceNode.loop = true;
+            sourceNode.connect(audioContext.destination);
+            
+            // 精确计时播放
+            const startTime = audioContext.currentTime;
+            sourceNode.start(startTime);
+            
+            // 在播放结束前0.05秒预加载下一段（确保无缝衔接）
+            sourceNode.onended = () => {
+                if (isPlaying) {
+                    playAudio();
+                }
+            };
+        }
+        
+        // 播放/暂停控制
+        playBtn.addEventListener('click', () => {
+            if (isPlaying) {
+                sourceNode.stop();
+                isPlaying = false;
+                playBtn.textContent = '播放';
+            } else {
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                playAudio();
+                isPlaying = true;
+                playBtn.textContent = '停止';
+            }
+        });
+        
+        // 页面加载时初始化
+        window.addEventListener('load', () => {
+            playBtn.disabled = true;
+            initAudio();
+        });
+    </script>
+</body>
+</html>
