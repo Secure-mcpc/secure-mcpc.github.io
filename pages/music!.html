@@ -2,43 +2,56 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>极简音乐播放器</title>
+    <title>无缝单曲循环播放器</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 300px;
-            margin: 20px auto;
-            padding: 10px;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
         }
         .controls {
             display: flex;
-            justify-content: center;
             gap: 10px;
             margin-top: 20px;
         }
         button {
-            padding: 8px 15px;
+            padding: 10px 20px;
             font-size: 16px;
             cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #4a6fa5;
+            color: white;
+            transition: background 0.2s;
         }
-        #trackInfo {
-            margin: 15px 0;
-            min-height: 40px;
+        button:hover {
+            background: #3a5a8f;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            color: #666;
         }
     </style>
 </head>
 <body>
-    <div id="trackInfo">点击播放开始</div>
-    
     <div class="controls">
-        <button id="prevBtn">上</button>
-        <button id="playBtn">播放</button>
-        <button id="nextBtn">下</button>
+        <button id="prevBtn">⏮ 上一曲</button>
+        <button id="playBtn">▶ 播放</button>
+        <button id="nextBtn">⏭ 下一曲</button>
     </div>
+    <div id="status">正在加载音频...</div>
 
     <script>
-        // 固定音乐列表
+        // 固定音乐列表（使用可靠的音频源）
         const musicList = [
             { title: "A CYBER'S WORLD?", url: "https://secure-mcpc.github.io/music/A CYBER'S WORLD.mp3" },
             { title: "WELCOME TO THE CITY", url: "https://secure-mcpc.github.io/music/WELCOME TO THE CITY.mp3" },
@@ -48,108 +61,144 @@
             { title: "The Third Sanctuary", url: "https://secure-mcpc.github.io/music/The Third Sanctuary.mp3" },
             { title: "Rude Ruster", url: "https://secure-mcpc.github.io/music/Rude Ruster.mp3" },
             { title: "From Now On (Battle 2)", url: "https://secure-mcpc.github.io/music/From Now On (Battle 2).mp3" },
-            { title: "btvp", url: "https://deltarune.com/assets/audio/battle_vapor.mp3" }
+            { title: "bv", url: "https://deltarune.com/assets/audio/battle_vapor.mp3" },
         ];
-
-        // 播放器状态
-        let currentTrackIndex = 0;
+        
+        // 全局变量
+        let audioContext;
+        let audioBuffers = [];
+        let currentSource;
+        let nextSource; // 用于无缝切换的预加载
+        let currentTrack = 0;
         let isPlaying = false;
-        let currentAudio = new Audio();
-        let nextAudio = new Audio(); // 用于预加载
-
+        
         // DOM元素
-        const trackInfo = document.getElementById('trackInfo');
         const playBtn = document.getElementById('playBtn');
         const prevBtn = document.getElementById('prevBtn');
         const nextBtn = document.getElementById('nextBtn');
-
-        // 初始化播放器
-        function initPlayer() {
-            loadTrack(currentTrackIndex);
-            setupEventListeners();
+        const statusEl = document.getElementById('status');
+        
+        // 初始化音频
+        async function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 预加载当前曲目和下一曲目
+                statusEl.textContent = "正在加载音频...";
+                await loadTrack(currentTrack);
+                await preloadNextTrack();
+                
+                statusEl.textContent = "准备就绪，点击播放";
+                enableControls();
+                
+            } catch (error) {
+                console.error('初始化失败:', error);
+                statusEl.textContent = "加载失败: " + error.message;
+            }
         }
-
+        
         // 加载指定曲目
-        function loadTrack(index) {
-            if (index < 0 || index >= musicList.length) return;
+        async function loadTrack(index) {
+            if (!audioBuffers[index]) {
+                const response = await fetch(musicList[index].url);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffers[index] = await audioContext.decodeAudioData(arrayBuffer);
+            }
+        }
+        
+        // 预加载下一曲目
+        async function preloadNextTrack() {
+            const nextIndex = (currentTrack + 1) % musicList.length;
+            await loadTrack(nextIndex);
+        }
+        
+        // 播放当前曲目（无缝循环）
+        function playCurrentTrack() {
+            if (!audioBuffers[currentTrack]) return;
             
-            currentTrackIndex = index;
-            const track = musicList[currentTrackIndex];
+            // 停止当前播放
+            if (currentSource) {
+                currentSource.stop();
+            }
             
-            // 更新UI
-            trackInfo.textContent = track.title;
+            // 创建新源并播放
+            currentSource = audioContext.createBufferSource();
+            currentSource.buffer = audioBuffers[currentTrack];
+            currentSource.loop = true; // 单曲循环
+            currentSource.connect(audioContext.destination);
             
-            // 创建新的Audio对象
-            const newAudio = new Audio(track.url);
-            newAudio.loop = true; // 单曲循环
+            // 精确计时播放
+            currentSource.start(0);
             
-            // 切换音频源
-            currentAudio.pause();
-            currentAudio = newAudio;
+            statusEl.textContent = `正在播放: ${musicList[currentTrack].title}`;
+            isPlaying = true;
+            playBtn.textContent = '⏸ 暂停';
             
-            // 预加载下一首
+            // 预加载下一曲目
             preloadNextTrack();
-            
-            // 自动播放如果之前是播放状态
-            if (isPlaying) {
-                currentAudio.play().catch(e => console.log('自动播放失败:', e));
+        }
+        
+        // 停止播放
+        function stopPlayback() {
+            if (currentSource) {
+                currentSource.stop();
+                currentSource = null;
             }
+            isPlaying = false;
+            playBtn.textContent = '▶ 播放';
         }
-
-        // 预加载下一首
-        function preloadNextTrack() {
-            const nextIndex = (currentTrackIndex + 1) % musicList.length;
-            const nextTrack = musicList[nextIndex];
+        
+        // 切换到指定曲目
+        async function changeTrack(direction) {
+            // 计算新曲目索引
+            const newTrack = (currentTrack + direction + musicList.length) % musicList.length;
             
-            nextAudio.src = nextTrack.url;
-            nextAudio.load();
-            nextAudio.volume = 0; // 静音预加载
-        }
-
-        // 播放/暂停切换
-        function togglePlay() {
-            if (currentAudio.paused) {
-                currentAudio.play().then(() => {
-                    isPlaying = true;
-                    playBtn.textContent = '暂停';
-                }).catch(e => {
-                    console.log('播放失败:', e);
-                    trackInfo.textContent = '点击播放按钮开始播放';
-                });
+            // 如果已经是同一曲目且正在播放，则不操作
+            if (newTrack === currentTrack && isPlaying) return;
+            
+            currentTrack = newTrack;
+            
+            // 确保新曲目已加载
+            await loadTrack(currentTrack);
+            
+            if (isPlaying) {
+                playCurrentTrack();
             } else {
-                currentAudio.pause();
-                isPlaying = false;
-                playBtn.textContent = '播放';
+                statusEl.textContent = `已选择: ${musicList[currentTrack].title}`;
             }
         }
-
-        // 上一曲
-        function prevTrack() {
-            const prevIndex = (currentTrackIndex - 1 + musicList.length) % musicList.length;
-            loadTrack(prevIndex);
+        
+        // 启用控制按钮
+        function enableControls() {
+            playBtn.disabled = false;
+            prevBtn.disabled = false;
+            nextBtn.disabled = false;
+        }
+        
+        // 按钮事件
+        playBtn.addEventListener('click', async () => {
             if (isPlaying) {
-                currentAudio.play().catch(e => console.log('播放失败:', e));
+                stopPlayback();
+            } else {
+                if (audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+                playCurrentTrack();
             }
-        }
-
-        // 下一曲
-        function nextTrack() {
-            const nextIndex = (currentTrackIndex + 1) % musicList.length;
-            loadTrack(nextIndex);
-            if (isPlaying) {
-                currentAudio.play().catch(e => console.log('播放失败:', e));
+        });
+        
+        prevBtn.addEventListener('click', () => changeTrack(-1));
+        nextBtn.addEventListener('click', () => changeTrack(1));
+        
+        // 页面加载时初始化
+        window.addEventListener('load', initAudio);
+        
+        // 处理页面失去焦点时音频暂停的问题
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isPlaying) {
+                stopPlayback();
             }
-        }
-
-        // 设置事件监听器
-        function setupEventListeners() {
-            playBtn.addEventListener('click', togglePlay);
-            prevBtn.addEventListener('click', prevTrack);
-            nextBtn.addEventListener('click', nextTrack);
-        }
-
-        // 初始化播放器
-        initPlayer();
+        });
     </script>
 </body>
 </html>
