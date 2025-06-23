@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>无缝单曲循环播放器</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f5f5f5;
+        }
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            border: none;
+            border-radius: 5px;
+            background: #4a6fa5;
+            color: white;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #3a5a8f;
+        }
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+        #status {
+            margin-top: 20px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button id="prevBtn">⏮ 上一曲</button>
+        <button id="playBtn">▶ 播放</button>
+        <button id="nextBtn">⏭ 下一曲</button>
+    </div>
+    <div id="status">正在加载音频...</div>
+
+    <script>
+        // 固定音乐列表（使用可靠的音频源）
+        const musicList = [
+            { title: "WELCOME TO THE CITY_alt", url: "https://secure-mcpc.github.io/music/Field Of Hopes And Dreams.mp3" },
+            { title: "Quiet Autumn", url: "https://secure-mcpc.github.io/music/Quiet Autumn.mp3" },
+            { title: "Scarlet Forest", url: "https://secure-mcpc.github.io/music/Scarlet Forest.mp3" },
+            { title: "A CYBER'S WORLD?", url: "https://secure-mcpc.github.io/music/A CYBER'S WORLD.mp3" },
+            { title: "WELCOME TO THE CITY", url: "https://secure-mcpc.github.io/music/WELCOME TO THE CITY.mp3" },
+            { title: "TV WORLD", url: "https://secure-mcpc.github.io/music/TV WORLD.mp3" },
+            { title: "Dark Sanctuary", url: "https://secure-mcpc.github.io/music/Dark Sanctuary.mp3" },
+            { title: "The Second Sanctuary", url: "https://secure-mcpc.github.io/music/The Second Sanctuary.mp3" },
+            { title: "The Third Sanctuary", url: "https://secure-mcpc.github.io/music/The Third Sanctuary.mp3" },
+            { title: "Rude Ruster", url: "https://secure-mcpc.github.io/music/Rude Ruster.mp3" },
+            { title: "From Now On (Battle 2)", url: "https://secure-mcpc.github.io/music/From Now On (Battle 2).mp3" }
+        ];
+        
+        // 全局变量
+        let audioContext;
+        let audioBuffers = [];
+        let currentSource;
+        let nextSource; // 用于无缝切换的预加载
+        let currentTrack = 0;
+        let isPlaying = false;
+        
+        // DOM元素
+        const playBtn = document.getElementById('playBtn');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const statusEl = document.getElementById('status');
+        
+        // 初始化音频
+        async function initAudio() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                
+                // 预加载当前曲目和下一曲目
+                statusEl.textContent = "正在加载音频...";
+                await loadTrack(currentTrack);
+                await preloadNextTrack();
+                
+                statusEl.textContent = "准备就绪，点击播放";
+                enableControls();
+                
+            } catch (error) {
+                console.error('初始化失败:', error);
+                statusEl.textContent = "加载失败: " + error.message;
+            }
+        }
+        
+        // 加载指定曲目
+        async function loadTrack(index) {
+            if (!audioBuffers[index]) {
+                const response = await fetch(musicList[index].url);
+                const arrayBuffer = await response.arrayBuffer();
+                audioBuffers[index] = await audioContext.decodeAudioData(arrayBuffer);
+            }
+        }
+        
+        // 预加载下一曲目
+        async function preloadNextTrack() {
+            const nextIndex = (currentTrack + 1) % musicList.length;
+            await loadTrack(nextIndex);
+        }
+        
+        // 播放当前曲目（无缝循环）
+        function playCurrentTrack() {
+            if (!audioBuffers[currentTrack]) return;
+            
+            // 停止当前播放
+            if (currentSource) {
+                currentSource.stop();
+            }
+            
+            // 创建新源并播放
+            currentSource = audioContext.createBufferSource();
+            currentSource.buffer = audioBuffers[currentTrack];
+            currentSource.loop = true; // 单曲循环
+            currentSource.connect(audioContext.destination);
+            
+            // 精确计时播放
+            currentSource.start(0);
+            
+            statusEl.textContent = `正在播放: ${musicList[currentTrack].title}`;
+            isPlaying = true;
+            playBtn.textContent = '⏸ 暂停';
+            
+            // 预加载下一曲目
+            preloadNextTrack();
+        }
+        
+        // 停止播放
+        function stopPlayback() {
+            if (currentSource) {
+                currentSource.stop();
+                currentSource = null;
+            }
+            isPlaying = false;
+            playBtn.textContent = '▶ 播放';
+        }
+        
+        // 切换到指定曲目
+        async function changeTrack(direction) {
+            // 计算新曲目索引
+            const newTrack = (currentTrack + direction + musicList.length) % musicList.length;
+            
+            // 如果已经是同一曲目且正在播放，则不操作
+            if (newTrack === currentTrack && isPlaying) return;
+            
+            currentTrack = newTrack;
+            
+            // 确保新曲目已加载
+            await loadTrack(currentTrack);
+            
+            if (isPlaying) {
+                playCurrentTrack();
+            } else {
+                statusEl.textContent = `已选择: ${musicList[currentTrack].title}`;
+            }
+        }
+        
+        // 启用控制按钮
+        function enableControls() {
+            playBtn.disabled = false;
+            prevBtn.disabled = false;
+            nextBtn.disabled = false;
+        }
+        
+        // 按钮事件
+        playBtn.addEventListener('click', async () => {
+            if (isPlaying) {
+                stopPlayback();
+            } else {
+                if (audioContext.state === 'suspended') {
+                    await audioContext.resume();
+                }
+                playCurrentTrack();
+            }
+        });
+        
+        prevBtn.addEventListener('click', () => changeTrack(-1));
+        nextBtn.addEventListener('click', () => changeTrack(1));
+        
+        // 页面加载时初始化
+        window.addEventListener('load', initAudio);
+        
+        // 处理页面失去焦点时音频暂停的问题
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden && isPlaying) {
+                stopPlayback();
+            }
+        });
+    </script>
+</body>
+</html>
