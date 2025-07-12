@@ -28,6 +28,16 @@ body.dark{
 	position:relative;
 	color:#fff;
 }
+body.udf{
+	font-family: Arial, sans-serif;
+	background-image:linear-gradient(to bottom right, #DD23D3 , #88FE10);
+	/*background-repeat:no-repeat;*/
+	background-position:center;
+	margin:0px;
+	padding-bottom:256px;
+	min-height:100vh;
+	position:relative;
+}
 header{
 	background-position:center;
 	padding:0px;
