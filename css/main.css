@@ -19,7 +19,7 @@ body.entry{
 	position:relative;
 }
 body.dark{
-	background-image:linear-gradient(to bottom right, #000000 , #000000);
+	background-color:#000000;
 	/*background-repeat:no-repeat;*/
 	background-position:center;
 	margin:0px;
