@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>词库组合器</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 20px 0;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 36px;
+            padding: 10px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+        }
+        .history {
+            text-align: left;
+            margin-top: 30px;
+        }
+        .history h3 {
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+        }
+        .history-item {
+            margin: 5px 0;
+            padding: 5px;
+            background-color: #f9f9f9;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <h1>词库组合器</h1>
+    <p>点击按钮生成随机组合</p >
+    
+    <button id="generateBtn">生成组合</button>
+    
+    <div id="result"></div>
+    
+    <div class="history">
+        <h3>生成历史</h3>
+        <div id="history"></div>
+    </div>
+
+    <script>
+        // 第一个库
+        const library1 = [
+            "旺仔", "雪碧", "芬达", "可口", "百事", 
+            "尖叫", "脉动", "大窑"
+        ];
+        
+        // 第二个库（三国演义二字人名）
+        const library2 = [
+            "刘备", "关羽", "张飞", "赵云", "曹操", 
+            "马超", "鲁肃", "孙权", "孙坚", "袁绍", 
+            "大乔", "小乔", "董卓", "吕布", "袁术", 
+            "吕蒙", "周瑜", "黄盖", "张角", "夏侯", 
+            "典韦", "许褚", "张辽", "徐晃", "庞德", 
+            "黄忠", "魏延", "姜维", "刘禅", "孟获", 
+            "陆逊", "太史", "甘宁", "程普", "韩当", 
+            "周泰", "蒋钦", "丁奉", "徐盛", "诸葛", 
+            "司马", "荀彧", "郭嘉", "贾诩", "文丑",
+            "荀攸", "程昱", "庞统", "法正", "马良", 
+            "马谡", "廖化", "张苞", "关兴", "关平",
+            "颜良"
+        ];
+        
+        // 获取DOM元素
+        const generateBtn = document.getElementById('generateBtn');
+        const resultDiv = document.getElementById('result');
+        const historyDiv = document.getElementById('history');
+        
+        // 生成随机组合的函数
+        function generateCombination() {
+            // 随机选择两个库中的词
+            const randomIndex1 = Math.floor(Math.random() * library1.length);
+            const randomIndex2 = Math.floor(Math.random() * library2.length);
+            
+            const word1 = library1[randomIndex1];
+            const word2 = library2[randomIndex2];
+            
+            // 组合结果
+            const combination = word1 + word2;
+            
+            // 显示结果
+            resultDiv.textContent = combination;
+            
+            // 添加到历史记录
+            const historyItem = document.createElement('div');
+            historyItem.className = 'history-item';
+            historyItem.textContent = combination;
+            historyDiv.insertBefore(historyItem, historyDiv.firstChild);
+            
+            return combination;
+        }
+        
+        // 添加按钮点击事件
+        generateBtn.addEventListener('click', generateCombination);
+        
+        // 初始生成一个组合
+        generateCombination();
+    </script>
+</body>
+</html>
