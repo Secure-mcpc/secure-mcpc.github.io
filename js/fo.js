@@ -1,6 +1,6 @@
 console.log("                          _ooOoo_                               ");
 console.log("                         o8888888o                              ");
-console.log("                         88" . "88                              ");
+console.log("                         88“ . ”88                              ");
 console.log("                         (| ^_^ |)                              ");
 console.log("                         O\  =  /O                              ");
 console.log("                      ____/`---'\____                           ");
