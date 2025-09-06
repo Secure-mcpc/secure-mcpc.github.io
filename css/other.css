@@ -1,19 +1,15 @@
+.nblk{
+  display: flex;
+  justify-content: center;
+}
 .block{
   background-color:#ffd383;
   height:150px;
-  width:15%;
+  width:150px;
   border-radius:25px;
   margin-top:25px;
 }
-#blka{
-  float:left;
-  margin-left:34%;
-}
-#blkb{
-  float:right;
-  margin-right:34%;
-}
 .img{
   height:100px;
-  width:12%;
+  width:120;
 }
