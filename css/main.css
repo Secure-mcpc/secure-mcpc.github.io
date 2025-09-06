@@ -38,6 +38,16 @@ body.udf{
 	min-height:100vh;
 	position:relative;
 }
+body.vid{
+	font-family: Arial, sans-serif;
+	background-color:gainsboro;
+	/*background-repeat:no-repeat;*/
+	background-position:center;
+	margin:0px;
+	padding:0px;
+	min-height:100vh;
+	position:relative;
+}
 header{
 	background-position:center;
 	padding:0px;
