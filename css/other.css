@@ -1,6 +1,8 @@
 .nblk{
   display: flex;
   justify-content: center;
+  padding-left:3px;
+  padding-right:3px;
 }
 .block{
   background-color:#ffd383;
