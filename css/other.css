@@ -1,14 +1,15 @@
 .block{
   background-color:#ffd383;
-  height:250px;
-  width:350px;
+  height:150px;
+  width:15%;
   border-radius:25px;
+  margin-top:25px;
 }
 #blka{
   float:left;
-  margin-left:25%;
+  margin-left:34%;
 }
 #blkb{
   float:right;
-  margin-right:25%;
+  margin-right:34%;
 }
