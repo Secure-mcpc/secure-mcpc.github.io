@@ -1,0 +1,14 @@
+.block{
+  background-color:#ffd383;
+  height:250px;
+  width:350px;
+  border-radius:25px;
+}
+#blka{
+  float:left;
+  margin-left:25%;
+}
+#blkb{
+  float:right;
+  margin-right:25%;
+}
