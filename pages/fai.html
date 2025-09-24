@@ -1,0 +1,20 @@
+<html>
+<head>
+<meta charset="utf-8">
+<title>ai</title>
+<script>
+document.write('<input type="text"><input type="button" value="发送" onclick="showai()"><br/>');
+function showai()
+{
+	document.body.innerHTML = '';
+	setTimeout(function(){document.write('<input type="text"><input type="button" value="发送" onclick="showai()"><br/>');},0);
+	setTimeout(function(){document.write(".");},500);
+	setTimeout(function(){document.write(".");},2500);
+	setTimeout(function(){document.write(".<br/>");},4500);
+	setTimeout(function(){document.write('<p>服务器繁忙，请稍后再试。</p>');},6500);
+}
+</script>
+</head>
+<body>
+</body>
+</html>
