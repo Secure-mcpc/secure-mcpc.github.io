@@ -329,7 +329,7 @@
 
     <script>
         // 创建浮动元素
-        const emojis = ['💩', '🤪', '😜', '🦄', '🌈', '🍌', '🚽', '👻', '💀', '🤡'];
+        const emojis = ['💩', '🤪', '😜', '🦄', '🌈', '🍌', '🚽', '👻', '💀', '🤡', '😏', '🧐' , '🤔', '🥴'];
         for (let i = 0; i < 20; i++) {
             const floating = document.createElement('div');
             floating.className = 'floating';
@@ -396,7 +396,7 @@
                 this.style.background = `hsl(${Math.random() * 360}, 100%, 50%)`;
                 
                 // 添加文字
-                const texts = ['哈哈哈！', '好傻啊！', '我是傻逼！', '这是什么？', '无语...', '太傻了！'];
+                const texts = ['哈哈哈！', '好傻啊！', '我是傻逼！', '这是什么？', '无语...', '太傻了！', '你是傻逼吗？', '越撸越帅哦'];
                 this.textContent = texts[Math.floor(Math.random() * texts.length)];
             });
         });
@@ -451,7 +451,8 @@
                 '太傻了！太傻了！',
                 '关闭这个网页吧！',
                 '你无聊吗？',
-                '这是什么垃圾？'
+                '这是什么垃圾？',
+                '你是傻逼吗？'
             ];
             document.querySelector('h1').textContent = titles[Math.floor(Math.random() * titles.length)];
         }, 3000);
